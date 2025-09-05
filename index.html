@@ -689,27 +689,15 @@
     </style>
 </head>
 <body>
-    <!-- <header class="header-nav">
-        <div class="container" style="justify-content: flex-start; display: flex;">
-            <a href="index.html" class="home-link">
-                <svg viewBox="0 0 188.09 78.7" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M0,45.67v-12.65L50.59,0v16.56L14.9,39.09v.53l35.69,22.53v16.56L0,45.67Z" fill="#b3b3b3"/>
-                    <path d="M83.68,37.22L68,0h19.78l5.69,15.69c1.16,3.2,2.68,8.7,4.06,12.95h.53c2.77-4.17,6.15-10.07,8.18-12.92L117.88,0h19.62l-32,39.88,16.96,38.82h-19.65l-6.53-17.04c-1.09-2.86-2.85-8.34-4.17-12.21h-.53c-2.82,4.29-6.01,9.18-8.4,12.42l-12.87,16.83h-19.72l33.09-41.48Z" fill="#000000"/>
-                    <path d="M137.5,62.14l35.69-22.53v-.53l-35.69-22.52V0l50.59,33.02v12.65l-50.59,33.02v-16.56Z" fill="#b3b3b3"/>
-                </svg>
-                Back to Home
-            </a>
-        </div>
-    </header> -->
 
     <main class="article-container">
         <article>
             <div class="article-header" style="margin-top: 30px;">
                 <div class="date-tag">
-                    <span class="date">May 24, 2025</span>
+                    <span class="date">September 9, 2025</span>
                     <span class="tag">Released</span>
                 </div>
-                <h1 class="article-title">Can Large Language Models Draw with Symbolic Graphics Programs?</h1>
+                <h1 class="article-title">Symbolic Graphics Programming with Large Language Models</h1>
                 <div style="text-align: center;margin-bottom: 30px;">
                     <img src="img/sgp-teaser.svg" alt="SVG tesaer"">
                 </div>
@@ -720,7 +708,7 @@
                         <div class="authors-title" style="text-align:left;">AUTHORS</div>
                         <div class="authors-list" style="text-align:left;">
                             <span class="author">Yamei Chen<sup>1,2,*</sup></span>, 
-                            <span class="author">Haoquan Zhang<sup>1,2,3,*</sup></span>, 
+                            <span class="author">Haoquan Zhang<sup>1,3,*</sup></span>, 
                             <span class="author">Yangyi Huang<sup>1,2</sup></span>, 
                             <span class="author">Zeju Qiu<sup>4</sup></span>, 
                             <span class="author">Kaipeng Zhang<sup>3</sup></span>, 
@@ -740,18 +728,14 @@
                     </div>
                 </div>
 
-                <!-- <p class="article-abstract">
-                    Large language models (LLMs) have demonstrated exceptional understanding and generation capabilities across diverse domains. However, their ability to generate Symbolic Graphics Programs (SGPs) remains insufficiently explored and evaluated. As one of the most typical SGP forms, Scalable Vector Graphics (SVG) has received some research attention, but existing methods either rely on diffusion models' capabilities followed by vectorization processing, or require extensive data to train LLMs with specialized SVG tokenizers and vocabularies. Therefore, we pose a key question: can we employ simple methods to activate and enhance the model's inherent SVG drawing capabilities? To address this challenge, we adopt reinforcement learning (RL) algorithms, utilizing similarity scores between visual encoders and input descriptions as reward signals, enabling the model to progressively improve SVG generation quality and semantic expression accuracy during training, ultimately achieving SVG generation capabilities comparable to state-of-the-art open-source models. For more comprehensive evaluation, we propose the SGP-Gen-Bench, which thoroughly assesses our model against other LLMs in terms of generation quality across three dimensions: object, scene, and composition. Additionally, leveraging the SVG generation setting, we deeply explore the mechanisms by which reinforcement learning paradigms enhance model capabilities.
-                </p> -->
-
                 <div class="project-links">
-                    <a href="https://github.com/Sphere-AI-Lab/SGP-Gen-trainer" class="project-link github">
+                    <a href="https://github.com/Sphere-AI-Lab/SGP-RL" class="project-link github">
                         <i class="fab fa-github"></i> Code
                     </a>
                     <a href="https://huggingface.co/datasets/SphereLab/sgp-gen-model" class="project-link huggingface">
                         <i class="fas fa-rocket"></i> Model
                     </a>
-                    <a href="https://huggingface.co/datasets/SphereLab/sgp-gen-bench" class="project-link huggingface">
+                    <a href="https://huggingface.co/collections/SphereLab/sgp-generation-68b7d8a3b70ff81184c9923d" class="project-link huggingface">
                         <i class="fas fa-chart-bar"></i> Bench
                     </a>
                     <a href="TBA" class="project-link arxiv">
@@ -775,25 +759,39 @@
             <div class="article-content">
                 <h2 id="introduction">Introduction</h2>
                 <p>
-                    This approach enables a new axis for test-time compute scaling that seamlessly
-                    blends visual and textual reasoning, as reflected in their state-of-the-art
-                    performance across multimodal benchmarks, marking a significant step toward
-                    more natural, multimodal-capable AI systems.
+                LLMs have demonstrated exceptional capabilities in understanding and generating computer programs. Motivated by the effectiveness, we focus on a special class of programs, symbolic graphics programs (SGPs), which can be translated into unique graphical content (e.g., images or 3D objects). However, the ability of LLMs to generate SGPs remains underexplored and insufficiently evaluated.
+                Among various SGPs, scalable vector graphics (SVGs) are one of the most representative and are widely available on the Internet, making them an ideal testbed for studying symbolic graphics programming with LLMs. We focus on two key research questions: 
                 </p>
-                
-                <h2 id="method">Method</h2>
                 <p>
-                    Thinking with images allows you to interact with AI more easily. You can ask questions by taking
-                    a photo without worrying about the positioning of objects—whether the text is upside down or 
-                    there are multiple physics problems in one photo. Even if objects aren't obvious at first glance,
-                    visual reasoning allows the model to zoom in to see more clearly.
+                <span style="color:#1274c5; font-weight:bold;">(1) how well can LLMs draw using SGPs?</span> 
+                <br>
+                <span style="color:#1274c5;">To address the first question, we introduce <em>SGP-GenBench</em>, a comprehensive benchmark for evaluating LLMs' ability to generate SGPs from three perspectives: object, scene, and composition.</span>
                 </p>
-                
-                <p class="note">All examples were completed with Agents-X visual model.</p>
+                <p>
+                <span style="color:#970d0d; font-weight:bold;">(2) how can we improve their ability to generate SGPs?</span>
+                <br>
+                <span style="color:#970d0d;">To improve performance, we propose a reinforcement learning approach that uses similarity scores between visual encoder outputs and input text descriptions as reward signals. This enables LLMs to progressively enhance SVG generation quality and semantic alignment during training. Our experiments show that RL significantly boosts the symbolic graphics programming abilities of LLMs, ultimately achieving performance comparable to state-of-the-art closed-source models.</span>
+                </p>
+                <p>
+                </p>
 
-                <h2 id="sgp-gen-bench">SGP-Gen-Bench</h2>
+                <h2 id="sgp-gen-bench">SGP as Visual Synthesis</h2>
+                <img src="img/parameterized- procedural.drawio.svg" alt="SVG visual synthesis"">
                 <p>
-                    SGP-Gen-Bench is a benchmark for evaluating the performance of SGP generation models.
+                    Symbolic graphics programming (SGP) aims to generate structured graphics code, such as SVG, from natural language instructions. Unlike conventional text-to-image models that produce pixel-based images, SGP translates prompts into interpretable, parametric programs, enabling precise and controllable visual synthesis.
+                </p>
+                <p>
+                    SVG is widely used and serves as a natural bridge between language and vision, making it ideal for evaluating LLMs' ability to ground semantics from prompt to code.
+                    SGPs are both <b style="color:#1274c5;">PARAMETRIC</b>
+                    <span style="color:#1274c5;">—allowing exact geometric and appearance control—</span>
+                    and <b style="color:#1ca67a;">PROCEDURAL</b>
+                    <span style="color:#1ca67a;">, supporting hierarchical and compositional scene construction.</span>
+                    These properties enable fine-grained, interpretable, and flexible visual generation, and allow us to directly analyze the complexity and structure of generated scenes.
+                </p>
+
+                <h2 id="sgp-gen-bench">SGP-GenBench</h2>
+                <p>
+                    We start with the first research question: To what extent can LLMs generate SGPs effectively? To investigate this, we introduce SGP-GenBench, a large-scale benchmark designed to evaluate LLM performance across three dimensions: object-level accuracy, scene-level semantics, and compositional consistency. SGP-GenBench enables systematic comparison across models and provides diagnostic insights into their symbolic graphics programming capabilities. Using this benchmark, we conduct extensive evaluations of both proprietary and open-source models. Our results indicate that proprietary reasoning-enhanced models consistently outperform non-reasoning variants, with performance strongly correlated with coding proficiency. Additionally, open-source LLMs, in contrast to proprietary ones, remain substantially less effective in generating valid and semantically aligned SVGs.
                 </p>
 
                 <h3 id="object-scene">Object & Scene</h3>
@@ -1159,6 +1157,11 @@
                     }
                 });
                 </script>
+
+                <h2 id="method">Method</h2>
+                    <p>
+                        The observation that open-source models still struggle to generate usable SGPs raises the second research question: How can we improve their SGP generation ability? To this end, we propose a reinforcement learning (RL) approach that leverages similarity scores between visual encoder outputs and input text descriptions as the verifiable reward signals. This approach enables LLMs to progressively improve both the quality and semantic alignment of their SVG generation. Experiments show that our method can substantially enhance symbolic graphics programming: open-source LLMs that initially produced unrecognizable SVGs are trained to achieve performance comparable to state-of-the-art proprietary models.
+                    </p>
                 
                 <h2 id="results">Results</h2>
                 <p>
