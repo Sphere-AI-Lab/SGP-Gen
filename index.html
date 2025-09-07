@@ -464,6 +464,18 @@
                 flex-direction: column;
                 gap: 10px;
             }
+
+            body {
+                padding: 0 15px;
+            }
+
+            .container {
+                padding: 0;
+            }
+
+            .article-container {
+                padding: 0;
+            }
         }
 
         @media (max-width: 1200px) {
@@ -752,7 +764,7 @@
                 <a href="#results" class="section-link">Results</a>
                 <a href="#object-scene" class="section-link" style="font-size: 12px; padding-left: 20px; color: #888;">Object & Scene</a>
                 <a href="#composition" class="section-link" style="font-size: 12px; padding-left: 20px; color: #888;">Composition</a>
-                <a href="#conclusion" class="section-link">Conclusion</a>
+                <a href="#analysis" class="section-link">Analysis</a>
                 <a href="#bibtex" class="section-link">Bibtex</a>
             </nav>
 
@@ -1252,18 +1264,26 @@
                 </script>
 
                 
-                <h2 id="conclusion">Analysis</h2>
+                <h2 id="analysis">Analysis</h2>
                 <h3> Reinforcement Learning vs. Best-of-N Sampling </h3>
+                <div style="display: flex; justify-content: space-between;">
+                    <img src="img/bon-a.svg" alt="Reinforcement Learning vs. Best-of-N Sampling" style="width: 50%;">
+                    <img src="img/bon-b.svg" alt="Reinforcement Learning vs. Best-of-N Sampling" style="width: 50%;">
+                </div>
                 Best-of-N (BoN) only approaches RL training results when N is extremely large, showing that RL is highly effective and not easily matched by simply sampling more.
                 
+                <p></p>
                 <h3>How SGP Generation Capabilities Evolve during Training</h3>
+                <p></p>
                 <p>
                     <b>Strategy 1: Decomposition into basic components.</b>
-                    The model first breaks down complex objects into simple SVG elements (like <code>rect</code>, <code>circle</code>, <code>line</code>, <code>path</code>), often with a brief comment. As training advances, it uses more granular decomposition, resulting in more accurate and well-placed drawings. The improvement comes from better composition of these fixed primitives, not from using more types.
+                    <img src="img/strategy-decomposition.drawio.svg" alt="Strategy 1: Decomposition into basic components" style="width: 100%;">
+                    <!-- The model first breaks down complex objects into simple SVG elements (like <code>&lt;rect&gt;</code>, <code>&lt;circle&gt;</code>, <code>&lt;line&gt;</code>, <code>&lt;path&gt;</code>), often with a brief comment. As training advances, it uses more granular decomposition, resulting in more accurate and well-placed drawings. The improvement comes from better composition of these fixed primitives, not from using more types. -->
                 </p>
                 <p>
                     <b>Strategy 2: Contextual optional details.</b>
-                    The model learns to add relevant, unprompted details—such as sprinkles on a cake or waves at a beach—that enhance scene realism and completeness. These additions make the output more coherent and visually appealing.
+                    <img src="img/optional-elements.drawio.svg" alt="Strategy 2: Contextual optional details" style="width: 100%;">
+                    <!-- The model learns to add relevant, unprompted details—such as sprinkles on a cake or waves at a beach—that enhance scene realism and completeness. These additions make the output more coherent and visually appealing. -->
                 </p>
 
                 <h2 id="bibtex">Bibtex</h2>
