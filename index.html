@@ -747,11 +747,11 @@
             
             <nav class="section-nav">
                 <a href="#introduction" class="section-link active">Introduction</a>
-                <a href="#method" class="section-link">Method</a>
                 <a href="#sgp-gen-bench" class="section-link">SGP-Gen-Bench</a>
+                <a href="#method" class="section-link">Method</a>
+                <a href="#results" class="section-link">Results</a>
                 <a href="#object-scene" class="section-link" style="font-size: 12px; padding-left: 20px; color: #888;">Object & Scene</a>
                 <a href="#composition" class="section-link" style="font-size: 12px; padding-left: 20px; color: #888;">Composition</a>
-                <a href="#results" class="section-link">Results</a>
                 <a href="#conclusion" class="section-link">Conclusion</a>
                 <a href="#bibtex" class="section-link">Bibtex</a>
             </nav>
@@ -759,8 +759,7 @@
             <div class="article-content">
                 <h2 id="introduction">Introduction</h2>
                 <p>
-                LLMs have demonstrated exceptional capabilities in understanding and generating computer programs. Motivated by the effectiveness, we focus on a special class of programs, symbolic graphics programs (SGPs), which can be translated into unique graphical content (e.g., images or 3D objects). However, the ability of LLMs to generate SGPs remains underexplored and insufficiently evaluated.
-                Among various SGPs, scalable vector graphics (SVGs) are one of the most representative and are widely available on the Internet, making them an ideal testbed for studying symbolic graphics programming with LLMs. We focus on two key research questions: 
+                Large language models (LLMs) excel at understanding and generating code, but their ability to create symbolic graphics programs (SGPs)—which produce images remains underexplored. SVGs, as a widely used SGP format, provide an ideal testbed for evaluating LLMs in this area. We address two main research questions:
                 </p>
                 <p>
                 <span style="color:#1274c5; font-weight:bold;">(1) how well can LLMs draw using SGPs?</span> 
@@ -770,7 +769,7 @@
                 <p>
                 <span style="color:#970d0d; font-weight:bold;">(2) how can we improve their ability to generate SGPs?</span>
                 <br>
-                <span style="color:#970d0d;">To improve performance, we propose a reinforcement learning approach that uses similarity scores between visual encoder outputs and input text descriptions as reward signals. This enables LLMs to progressively enhance SVG generation quality and semantic alignment during training. Our experiments show that RL significantly boosts the symbolic graphics programming abilities of LLMs, ultimately achieving performance comparable to state-of-the-art closed-source models.</span>
+                <span style="color:#970d0d;">To improve performance, we propose a reinforcement learning approach that uses similarity scores between visual encoder outputs and input text descriptions as reward signals. Our experiments show that RL significantly boosts the symbolic graphics programming abilities of LLMs.</span>
                 </p>
                 <p>
                 </p>
@@ -782,413 +781,500 @@
                 </p>
                 <p>
                     SVG is widely used and serves as a natural bridge between language and vision, making it ideal for evaluating LLMs' ability to ground semantics from prompt to code.
-                    SGPs are both <b style="color:#1274c5;">PARAMETRIC</b>
-                    <span style="color:#1274c5;">—allowing exact geometric and appearance control—</span>
-                    and <b style="color:#1ca67a;">PROCEDURAL</b>
-                    <span style="color:#1ca67a;">, supporting hierarchical and compositional scene construction.</span>
+                    SGPs are both:
+                </p>
+                <p>
+                    <b style="color:#1274c5;">(a) PARAMETRIC</b>
+                    <span style="color:#1274c5;"> - allowing exact geometric and appearance control</span>
+                    <br>
+                    <b style="color:#1ca67a;">(b) PROCEDURAL</b>
+                    <span style="color:#1ca67a;"> - supporting hierarchical and compositional scene construction.</span>
+                </p>
+                <p>
                     These properties enable fine-grained, interpretable, and flexible visual generation, and allow us to directly analyze the complexity and structure of generated scenes.
                 </p>
 
                 <h2 id="sgp-gen-bench">SGP-GenBench</h2>
+                <h3> Construction </h3>
                 <p>
-                    We start with the first research question: To what extent can LLMs generate SGPs effectively? To investigate this, we introduce SGP-GenBench, a large-scale benchmark designed to evaluate LLM performance across three dimensions: object-level accuracy, scene-level semantics, and compositional consistency. SGP-GenBench enables systematic comparison across models and provides diagnostic insights into their symbolic graphics programming capabilities. Using this benchmark, we conduct extensive evaluations of both proprietary and open-source models. Our results indicate that proprietary reasoning-enhanced models consistently outperform non-reasoning variants, with performance strongly correlated with coding proficiency. Additionally, open-source LLMs, in contrast to proprietary ones, remain substantially less effective in generating valid and semantically aligned SVGs.
+                    <ul>
+                        <li><b>- Scene generation</b>: Evaluated on COCO-val, covering 80 object categories with complex scene descriptions. We sample 1,024 images for efficient and representative assessment.</li>
+                        <li><b>- Object generation</b>: Assessed on SGP-Object-val, a set of 930 single-object examples with captions, focusing on the model's ability to render individual objects accurately.</li>
+                        <li><b>- Compositional generation</b>: Tested on SGP-CompBench with 3,200 prompts, targeting attribute binding, spatial relationships, and numeracy using 80 common objects for compositional evaluation.</li>
+                    </ul>
                 </p>
-
-                <h3 id="object-scene">Object & Scene</h3>
-                <p>
-                    Object & Scene is a benchmark for evaluating the performance of SGP generation models.
-                </p>
-                
-                <h3 id="composition">Composition</h3>
-
-                <div style="overflow-x: auto; margin: 20px 0;">
-                    <table style="width: 100%; border-collapse: collapse; font-size: 14px; background: white; border: 1px solid #ddd;">
-                        <thead>
-                            <tr style="background-color: #f8f9fa;">
-                                <th style="border: 1px solid #ddd; padding: 8px; text-align: left; font-weight: 600;">Model</th>
-                                <th style="border: 1px solid #ddd; padding: 8px; text-align: center; font-weight: 600;" colspan="4">Attribute Binding⬆️</th>
-                                <th style="border: 1px solid #ddd; padding: 8px; text-align: center; font-weight: 600;" colspan="4">Relation⬆️</th>
-                                <th style="border: 1px solid #ddd; padding: 8px; text-align: center; font-weight: 600;" colspan="4">Numeracy⬆️</th>
-                                <th style="border: 1px solid #ddd; padding: 8px; text-align: center; font-weight: 600;">Avg.</th>
-                            </tr>
-                            <tr style="background-color: #f8f9fa; font-size: 12px; color: #666;">
-                                <th style="border: 1px solid #ddd; padding: 4px;"></th>
-                                <th style="border: 1px solid #ddd; padding: 4px; text-align: center;">Color</th>
-                                <th style="border: 1px solid #ddd; padding: 4px; text-align: center;">Shape</th>
-                                <th style="border: 1px solid #ddd; padding: 4px; text-align: center;">Texture</th>
-                                <th style="border: 1px solid #ddd; padding: 4px; text-align: center;">Avg.</th>
-                                <th style="border: 1px solid #ddd; padding: 4px; text-align: center;">2D</th>
-                                <th style="border: 1px solid #ddd; padding: 4px; text-align: center;">3D</th>
-                                <th style="border: 1px solid #ddd; padding: 4px; text-align: center;">Implicit</th>
-                                <th style="border: 1px solid #ddd; padding: 4px; text-align: center;">Avg.</th>
-                                <th style="border: 1px solid #ddd; padding: 4px; text-align: center;">Total</th>
-                                <th style="border: 1px solid #ddd; padding: 4px; text-align: center;">Item</th>
-                                <th style="border: 1px solid #ddd; padding: 4px; text-align: center;">CPT</th>
-                                <th style="border: 1px solid #ddd; padding: 4px; text-align: center;">Avg.</th>
-                                <th style="border: 1px solid #ddd; padding: 4px;"></th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr style="border-bottom: 2px solid #333;">
-                                <td style="border: 1px solid #ddd; padding: 8px; font-weight: 600;" colspan="14">Frontier closed-source LLMs</td>
-                            </tr>
-                            <tr>
-                                <td style="border: 1px solid #ddd; padding: 8px;">GPT-4o</td>
-                                <td style="border: 1px solid #ddd; padding: 8px; text-align: center;">62.2</td>
-                                <td style="border: 1px solid #ddd; padding: 8px; text-align: center;">48.7</td>
-                                <td style="border: 1px solid #ddd; padding: 8px; text-align: center;">34.3</td>
-                                <td style="border: 1px solid #ddd; padding: 8px; text-align: center;">48.4</td>
-                                <td style="border: 1px solid #ddd; padding: 8px; text-align: center;">49.7</td>
-                                <td style="border: 1px solid #ddd; padding: 8px; text-align: center;">37.3</td>
-                                <td style="border: 1px solid #ddd; padding: 8px; text-align: center;">49.2</td>
-                                <td style="border: 1px solid #ddd; padding: 8px; text-align: center;">45.4</td>
-                                <td style="border: 1px solid #ddd; padding: 8px; text-align: center;">85.9</td>
-                                <td style="border: 1px solid #ddd; padding: 8px; text-align: center;">25.5</td>
-                                <td style="border: 1px solid #ddd; padding: 8px; text-align: center;">51.1</td>
-                                <td style="border: 1px solid #ddd; padding: 8px; text-align: center;">52.7</td>
-                                <td style="border: 1px solid #ddd; padding: 8px; text-align: center; font-weight: 600;">48.3</td>
-                            </tr>
-                            <tr>
-                                <td style="border: 1px solid #ddd; padding: 8px;">o1</td>
-                                <td style="border: 1px solid #ddd; padding: 8px; text-align: center;">70.8</td>
-                                <td style="border: 1px solid #ddd; padding: 8px; text-align: center;">25.2</td>
-                                <td style="border: 1px solid #ddd; padding: 8px; text-align: center;">53.0</td>
-                                <td style="border: 1px solid #ddd; padding: 8px; text-align: center;">49.6</td>
-                                <td style="border: 1px solid #ddd; padding: 8px; text-align: center;">54.6</td>
-                                <td style="border: 1px solid #ddd; padding: 8px; text-align: center;">39.4</td>
-                                <td style="border: 1px solid #ddd; padding: 8px; text-align: center;">46.4</td>
-                                <td style="border: 1px solid #ddd; padding: 8px; text-align: center;">46.8</td>
-                                <td style="border: 1px solid #ddd; padding: 8px; text-align: center;">66.4</td>
-                                <td style="border: 1px solid #ddd; padding: 8px; text-align: center;">20.1</td>
-                                <td style="border: 1px solid #ddd; padding: 8px; text-align: center;">41.7</td>
-                                <td style="border: 1px solid #ddd; padding: 8px; text-align: center;">42.0</td>
-                                <td style="border: 1px solid #ddd; padding: 8px; text-align: center; font-weight: 600;">46.7</td>
-                            </tr>
-                            <tr>
-                                <td style="border: 1px solid #ddd; padding: 8px;">o3</td>
-                                <td style="border: 1px solid #ddd; padding: 8px; text-align: center;">88.9</td>
-                                <td style="border: 1px solid #ddd; padding: 8px; text-align: center;">73.6</td>
-                                <td style="border: 1px solid #ddd; padding: 8px; text-align: center;">71.7</td>
-                                <td style="border: 1px solid #ddd; padding: 8px; text-align: center;">78.1</td>
-                                <td style="border: 1px solid #ddd; padding: 8px; text-align: center; font-weight: 600;">81.6</td>
-                                <td style="border: 1px solid #ddd; padding: 8px; text-align: center;">62.0</td>
-                                <td style="border: 1px solid #ddd; padding: 8px; text-align: center;">84.5</td>
-                                <td style="border: 1px solid #ddd; padding: 8px; text-align: center;">76.0</td>
-                                <td style="border: 1px solid #ddd; padding: 8px; text-align: center;">91.6</td>
-                                <td style="border: 1px solid #ddd; padding: 8px; text-align: center;">59.8</td>
-                                <td style="border: 1px solid #ddd; padding: 8px; text-align: center;">81.1</td>
-                                <td style="border: 1px solid #ddd; padding: 8px; text-align: center;">78.8</td>
-                                <td style="border: 1px solid #ddd; padding: 8px; text-align: center; font-weight: 600;">77.5</td>
-                            </tr>
-                            <tr>
-                                <td style="border: 1px solid #ddd; padding: 8px;">o4-mini</td>
-                                <td style="border: 1px solid #ddd; padding: 8px; text-align: center;">82.4</td>
-                                <td style="border: 1px solid #ddd; padding: 8px; text-align: center;">62.1</td>
-                                <td style="border: 1px solid #ddd; padding: 8px; text-align: center;">69.6</td>
-                                <td style="border: 1px solid #ddd; padding: 8px; text-align: center;">71.4</td>
-                                <td style="border: 1px solid #ddd; padding: 8px; text-align: center;">71.0</td>
-                                <td style="border: 1px solid #ddd; padding: 8px; text-align: center;">57.9</td>
-                                <td style="border: 1px solid #ddd; padding: 8px; text-align: center;">76.5</td>
-                                <td style="border: 1px solid #ddd; padding: 8px; text-align: center;">68.5</td>
-                                <td style="border: 1px solid #ddd; padding: 8px; text-align: center;">90.3</td>
-                                <td style="border: 1px solid #ddd; padding: 8px; text-align: center;">52.9</td>
-                                <td style="border: 1px solid #ddd; padding: 8px; text-align: center;">76.1</td>
-                                <td style="border: 1px solid #ddd; padding: 8px; text-align: center;">74.3</td>
-                                <td style="border: 1px solid #ddd; padding: 8px; text-align: center; font-weight: 600;">71.0</td>
-                            </tr>
-                            <tr>
-                                <td style="border: 1px solid #ddd; padding: 8px;">Gemini 2.5 Flash Preview</td>
-                                <td style="border: 1px solid #ddd; padding: 8px; text-align: center;">63.6</td>
-                                <td style="border: 1px solid #ddd; padding: 8px; text-align: center;">45.0</td>
-                                <td style="border: 1px solid #ddd; padding: 8px; text-align: center;">56.9</td>
-                                <td style="border: 1px solid #ddd; padding: 8px; text-align: center;">55.2</td>
-                                <td style="border: 1px solid #ddd; padding: 8px; text-align: center;">46.0</td>
-                                <td style="border: 1px solid #ddd; padding: 8px; text-align: center;">38.9</td>
-                                <td style="border: 1px solid #ddd; padding: 8px; text-align: center;">57.1</td>
-                                <td style="border: 1px solid #ddd; padding: 8px; text-align: center;">47.3</td>
-                                <td style="border: 1px solid #ddd; padding: 8px; text-align: center;">82.8</td>
-                                <td style="border: 1px solid #ddd; padding: 8px; text-align: center;">34.5</td>
-                                <td style="border: 1px solid #ddd; padding: 8px; text-align: center;">62.0</td>
-                                <td style="border: 1px solid #ddd; padding: 8px; text-align: center;">59.8</td>
-                                <td style="border: 1px solid #ddd; padding: 8px; text-align: center; font-weight: 600;">53.4</td>
-                            </tr>
-                            <tr>
-                                <td style="border: 1px solid #ddd; padding: 8px;">Gemini 2.5 Pro Preview</td>
-                                <td style="border: 1px solid #ddd; padding: 8px; text-align: center;">88.1</td>
-                                <td style="border: 1px solid #ddd; padding: 8px; text-align: center;">65.7</td>
-                                <td style="border: 1px solid #ddd; padding: 8px; text-align: center;">74.9</td>
-                                <td style="border: 1px solid #ddd; padding: 8px; text-align: center;">76.2</td>
-                                <td style="border: 1px solid #ddd; padding: 8px; text-align: center;">77.4</td>
-                                <td style="border: 1px solid #ddd; padding: 8px; text-align: center;">59.1</td>
-                                <td style="border: 1px solid #ddd; padding: 8px; text-align: center;">80.0</td>
-                                <td style="border: 1px solid #ddd; padding: 8px; text-align: center;">72.2</td>
-                                <td style="border: 1px solid #ddd; padding: 8px; text-align: center;">94.7</td>
-                                <td style="border: 1px solid #ddd; padding: 8px; text-align: center;">68.0</td>
-                                <td style="border: 1px solid #ddd; padding: 8px; text-align: center;">83.8</td>
-                                <td style="border: 1px solid #ddd; padding: 8px; text-align: center;">82.3</td>
-                                <td style="border: 1px solid #ddd; padding: 8px; text-align: center; font-weight: 600;">76.2</td>
-                            </tr>
-                            <tr>
-                                <td style="border: 1px solid #ddd; padding: 8px;">Claude 3.7 Sonnet</td>
-                                <td style="border: 1px solid #ddd; padding: 8px; text-align: center;">89.3</td>
-                                <td style="border: 1px solid #ddd; padding: 8px; text-align: center;">82.8</td>
-                                <td style="border: 1px solid #ddd; padding: 8px; text-align: center;">77.3</td>
-                                <td style="border: 1px solid #ddd; padding: 8px; text-align: center;">83.1</td>
-                                <td style="border: 1px solid #ddd; padding: 8px; text-align: center;">75.9</td>
-                                <td style="border: 1px solid #ddd; padding: 8px; text-align: center;">59.4</td>
-                                <td style="border: 1px solid #ddd; padding: 8px; text-align: center;">73.7</td>
-                                <td style="border: 1px solid #ddd; padding: 8px; text-align: center;">69.7</td>
-                                <td style="border: 1px solid #ddd; padding: 8px; text-align: center;">91.4</td>
-                                <td style="border: 1px solid #ddd; padding: 8px; text-align: center;">65.5</td>
-                                <td style="border: 1px solid #ddd; padding: 8px; text-align: center;">85.5</td>
-                                <td style="border: 1px solid #ddd; padding: 8px; text-align: center;">82.5</td>
-                                <td style="border: 1px solid #ddd; padding: 8px; text-align: center; font-weight: 600;">77.9</td>
-                            </tr>
-                            <tr style="background-color: rgba(128, 128, 128, 0.2);">
-                                <td style="border: 1px solid #ddd; padding: 8px;">Claude 3.7 Sonnet Thinking</td>
-                                <td style="border: 1px solid #ddd; padding: 8px; text-align: center; font-weight: 600;">90.5</td>
-                                <td style="border: 1px solid #ddd; padding: 8px; text-align: center; font-weight: 600;">85.6</td>
-                                <td style="border: 1px solid #ddd; padding: 8px; text-align: center; font-weight: 600;">82.4</td>
-                                <td style="border: 1px solid #ddd; padding: 8px; text-align: center; font-weight: 600;">86.2</td>
-                                <td style="border: 1px solid #ddd; padding: 8px; text-align: center;">80.2</td>
-                                <td style="border: 1px solid #ddd; padding: 8px; text-align: center; font-weight: 600;">74.4</td>
-                                <td style="border: 1px solid #ddd; padding: 8px; text-align: center; font-weight: 600;">86.4</td>
-                                <td style="border: 1px solid #ddd; padding: 8px; text-align: center; font-weight: 600;">80.3</td>
-                                <td style="border: 1px solid #ddd; padding: 8px; text-align: center; font-weight: 600;">94.9</td>
-                                <td style="border: 1px solid #ddd; padding: 8px; text-align: center; font-weight: 600;">78.9</td>
-                                <td style="border: 1px solid #ddd; padding: 8px; text-align: center; font-weight: 600;">91.4</td>
-                                <td style="border: 1px solid #ddd; padding: 8px; text-align: center; font-weight: 600;">89.4</td>
-                                <td style="border: 1px solid #ddd; padding: 8px; text-align: center; font-weight: 600;">84.8</td>
-                            </tr>
-                            <tr style="border-bottom: 2px solid #333;">
-                                <td style="border: 1px solid #ddd; padding: 8px; font-weight: 600;" colspan="14">Open-source LLMs</td>
-                            </tr>
-                            <tr>
-                                <td style="border: 1px solid #ddd; padding: 8px;">QwQ-32B</td>
-                                <td style="border: 1px solid #ddd; padding: 8px; text-align: center;">54.3</td>
-                                <td style="border: 1px solid #ddd; padding: 8px; text-align: center;">51.0</td>
-                                <td style="border: 1px solid #ddd; padding: 8px; text-align: center;">31.4</td>
-                                <td style="border: 1px solid #ddd; padding: 8px; text-align: center;">45.6</td>
-                                <td style="border: 1px solid #ddd; padding: 8px; text-align: center;">43.6</td>
-                                <td style="border: 1px solid #ddd; padding: 8px; text-align: center;">33.5</td>
-                                <td style="border: 1px solid #ddd; padding: 8px; text-align: center;">46.0</td>
-                                <td style="border: 1px solid #ddd; padding: 8px; text-align: center;">41.0</td>
-                                <td style="border: 1px solid #ddd; padding: 8px; text-align: center;">79.9</td>
-                                <td style="border: 1px solid #ddd; padding: 8px; text-align: center;">21.1</td>
-                                <td style="border: 1px solid #ddd; padding: 8px; text-align: center;">51.4</td>
-                                <td style="border: 1px solid #ddd; padding: 8px; text-align: center;">50.9</td>
-                                <td style="border: 1px solid #ddd; padding: 8px; text-align: center; font-weight: 600;">45.2</td>
-                            </tr>
-                            <tr>
-                                <td style="border: 1px solid #ddd; padding: 8px;">DeepSeek-R1</td>
-                                <td style="border: 1px solid #ddd; padding: 8px; text-align: center;">72.6</td>
-                                <td style="border: 1px solid #ddd; padding: 8px; text-align: center;">62.7</td>
-                                <td style="border: 1px solid #ddd; padding: 8px; text-align: center; font-weight: 600;">48.4</td>
-                                <td style="border: 1px solid #ddd; padding: 8px; text-align: center;">61.2</td>
-                                <td style="border: 1px solid #ddd; padding: 8px; text-align: center; font-weight: 600;">59.3</td>
-                                <td style="border: 1px solid #ddd; padding: 8px; text-align: center;">43.8</td>
-                                <td style="border: 1px solid #ddd; padding: 8px; text-align: center;">58.2</td>
-                                <td style="border: 1px solid #ddd; padding: 8px; text-align: center;">53.7</td>
-                                <td style="border: 1px solid #ddd; padding: 8px; text-align: center;">83.5</td>
-                                <td style="border: 1px solid #ddd; padding: 8px; text-align: center;">35.4</td>
-                                <td style="border: 1px solid #ddd; padding: 8px; text-align: center;">60.4</td>
-                                <td style="border: 1px solid #ddd; padding: 8px; text-align: center;">57.4</td>
-                                <td style="border: 1px solid #ddd; padding: 8px; text-align: center; font-weight: 600;">57.4</td>
-                            </tr>
-                            <tr>
-                                <td style="border: 1px solid #ddd; padding: 8px;">Qwen-2.5-7B</td>
-                                <td style="border: 1px solid #ddd; padding: 8px; text-align: center;">7.1</td>
-                                <td style="border: 1px solid #ddd; padding: 8px; text-align: center;">10.0</td>
-                                <td style="border: 1px solid #ddd; padding: 8px; text-align: center;">1.7</td>
-                                <td style="border: 1px solid #ddd; padding: 8px; text-align: center;">6.3</td>
-                                <td style="border: 1px solid #ddd; padding: 8px; text-align: center;">5.2</td>
-                                <td style="border: 1px solid #ddd; padding: 8px; text-align: center;">5.8</td>
-                                <td style="border: 1px solid #ddd; padding: 8px; text-align: center;">8.1</td>
-                                <td style="border: 1px solid #ddd; padding: 8px; text-align: center;">6.4</td>
-                                <td style="border: 1px solid #ddd; padding: 8px; text-align: center;">42.6</td>
-                                <td style="border: 1px solid #ddd; padding: 8px; text-align: center;">5.8</td>
-                                <td style="border: 1px solid #ddd; padding: 8px; text-align: center;">10.7</td>
-                                <td style="border: 1px solid #ddd; padding: 8px; text-align: center;">16.1</td>
-                                <td style="border: 1px solid #ddd; padding: 8px; text-align: center;">8.8</td>
-                            </tr>
-                            <tr style="background-color: rgba(255, 165, 0, 0.15);">
-                                <td style="border: 1px solid #ddd; padding: 8px;">Qwen-2.5-7B - RL <strong>(Ours)</strong></td>
-                                <td style="border: 1px solid #ddd; padding: 8px; text-align: center; font-weight: 600;">84.3</td>
-                                <td style="border: 1px solid #ddd; padding: 8px; text-align: center; font-weight: 600;">71.3</td>
-                                <td style="border: 1px solid #ddd; padding: 8px; text-align: center;">46.0</td>
-                                <td style="border: 1px solid #ddd; padding: 8px; text-align: center; font-weight: 600;">67.2</td>
-                                <td style="border: 1px solid #ddd; padding: 8px; text-align: center;">55.7</td>
-                                <td style="border: 1px solid #ddd; padding: 8px; text-align: center; font-weight: 600;">53.9</td>
-                                <td style="border: 1px solid #ddd; padding: 8px; text-align: center; font-weight: 600;">61.7</td>
-                                <td style="border: 1px solid #ddd; padding: 8px; text-align: center; font-weight: 600;">57.1</td>
-                                <td style="border: 1px solid #ddd; padding: 8px; text-align: center;">63.4</td>
-                                <td style="border: 1px solid #ddd; padding: 8px; text-align: center; font-weight: 600;">47.5</td>
-                                <td style="border: 1px solid #ddd; padding: 8px; text-align: center;">57.6</td>
-                                <td style="border: 1px solid #ddd; padding: 8px; text-align: center;">56.8</td>
-                                <td style="border: 1px solid #ddd; padding: 8px; text-align: center; font-weight: 600;">60.8</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-                <p style="font-size: 14px; color: #666; margin-top: 10px;">
-                    ⬆️ Performance scores are reported as scores. Higher scores indicate better performance.
-                </p>
-
-                <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-                <h3 style="text-align: center; margin: 40px 0 20px 0;">Overall Performance Comparison</h3>
-                <div style="margin: 20px 0;">
-                    <canvas id="overallPerformanceChart" width="800" height="400"></canvas>
-                </div>
-                
-                <script>
-                // Overall performance chart
-                const overallCtx = document.getElementById('overallPerformanceChart');
-                
-                new Chart(overallCtx, {
-                    type: 'bar',
-                    data: {
-                        labels: [
-                            'Claude-3.7 Sonnet Thinking',
-                            'Claude-3.7 Sonnet',
-                            'o3',
-                            'Gemini 2.5 Pro Preview',
-                            'o4-mini',
-                            'Gemini 2.5 Flash Preview',
-                            'GPT-4o',
-                            'o1',
-                            'Qwen-2.5-7B-RL (Ours)',
-                            'DeepSeek-R1',
-                            'Qwen-32B',
-                            'Qwen-2.5-7B'
-                        ],
-                        datasets: [{
-                            label: 'Overall Average Score (%)',
-                            data: [84.8, 77.9, 77.5, 76.2, 71.0, 53.4, 48.3, 46.7, 60.8, 57.4, 45.2, 8.8],
-                            backgroundColor: [
-                                '#1a365d',  // Claude-3.7 Sonnet Thinking - Darkest blue
-                                '#2c5282',  // Claude-3.7 Sonnet - Dark blue
-                                '#3182ce',  // o3 - Medium dark blue
-                                '#4299e1',  // Gemini 2.5 Pro Preview - Medium blue
-                                '#63b3ed',  // o4-mini - Medium light blue
-                                '#90cdf4',  // Gemini 2.5 Flash Preview - Light blue
-                                '#bee3f8',  // GPT-4o - Very light blue
-                                '#e6f3ff',  // o1 - Lightest blue
-                                '#dc2626',  // Ours - Red highlight
-                                '#ef4444',  // DeepSeek-R1 - Medium red
-                                '#f87171',  // Qwen-32B - Light red
-                                '#fca5a5'   // Qwen-2.5-7B - Very light red
-                            ],
-                            borderColor: [
-                                '#0f2027',  // Claude Sonnet Thinking border - darker blue
-                                '#1a365d',  // Claude Sonnet border - dark blue
-                                '#2c5282',  // o3 border - medium dark blue
-                                '#3182ce',  // Gemini Pro border - medium blue
-                                '#4299e1',  // o4-mini border - medium light blue
-                                '#63b3ed',  // Gemini Flash border - light blue
-                                '#90cdf4',  // GPT-4o border - very light blue
-                                '#bee3f8',  // o1 border - lightest blue
-                                '#b91c1c',  // Ours - darker red border to match highlight
-                                '#dc2626',  // DeepSeek-R1 border - red
-                                '#ef4444',  // Qwen-32B border - medium red
-                                '#f87171'   // Qwen-2.5-7B border - light red
-                            ],
-                            borderWidth: 2,
-                            borderRadius: 4,
-                            borderSkipped: false,
-                        }]
-                    },
-                    options: {
-                        responsive: true,
-                        maintainAspectRatio: false,
-                        plugins: {
-                            legend: {
-                                display: true,
-                                position: 'top',
-                                labels: {
-                                    font: {
-                                        size: 14,
-                                        weight: '500'
-                                    }
-                                }
-                            },
-                            tooltip: {
-                                callbacks: {
-                                    label: function(context) {
-                                        return context.dataset.label + ': ' + context.parsed.y + '%';
-                                    }
-                                }
-                            }
-                        },
-                        scales: {
-                            y: {
-                                beginAtZero: true,
-                                max: 100,
-                                ticks: {
-                                    callback: function(value) {
-                                        return value + '%';
-                                    },
-                                    font: {
-                                        size: 12
-                                    }
-                                },
-                                grid: {
-                                    color: '#e5e5e5'
-                                }
-                            },
-                            x: {
-                                ticks: {
-                                    maxRotation: 45,
-                                    minRotation: 0,
-                                    font: {
-                                        size: 11
-                                    }
-                                },
-                                grid: {
-                                    display: false
-                                }
-                            }
-                        },
-                        layout: {
-                            padding: {
-                                top: 20,
-                                bottom: 20
-                            }
-                        }
-                    }
-                });
-                </script>
 
                 <h2 id="method">Method</h2>
+                <img src="img/method.drawio.svg" alt="Method" style="width:80%;max-width:1000px;display:block;margin:auto;">
                     <p>
-                        The observation that open-source models still struggle to generate usable SGPs raises the second research question: How can we improve their SGP generation ability? To this end, we propose a reinforcement learning (RL) approach that leverages similarity scores between visual encoder outputs and input text descriptions as the verifiable reward signals. This approach enables LLMs to progressively improve both the quality and semantic alignment of their SVG generation. Experiments show that our method can substantially enhance symbolic graphics programming: open-source LLMs that initially produced unrecognizable SVGs are trained to achieve performance comparable to state-of-the-art proprietary models.
+                        Given a text description, we sample a group of SVG codes from the model and render them as images. Each SVG code is scored by the alignment between the rendered image and the text description. The advantages are calculated based on the scores, and used for updating the model.
                     </p>
-                
-                <h2 id="results">Results</h2>
+                <h3>Discussion of Method</h3>
+                <p></p>
                 <p>
-                    Our latest visual reasoning models work in tandem with other tools like Python data analysis,
-                    web search, and image generation to creatively and effectively solve various tasks,
-                    from educational questions to complex scientific challenges.
+                    <b>- Distilling from vision models.</b>
+                    We use external vision models (e.g., DINO, CLIP) to define rewards, guiding the LLM to align its generations with strong visual and semantic priors. This implicit distillation improves both visual understanding and cross-modal alignment.
+                </p>
+                <p>
+                    <b>- Training without ground truth SGPs.</b>
+                    Our RL method learns directly from images using feedback from vision models, removing the need for paired image-program data and enabling scalable, diverse training.
+                </p>
+                <p>
+                    <b>- Aligning language and vision.</b>
+                    The RL process ensures that generated SGPs are consistent with both linguistic input and visual model judgments, grounding language in visual evidence and enhancing cross-modal reasoning.
                 </p>
                 
-                <!-- Dynamic category sections will be inserted here -->
-                <div id="category-sections"></div>
+                <h2 id="results">Results</h2>
+                <h3>Overview of SGP-GenBench</h3>
+                <p></p>
+                <!-- INSERT_YOUR_CODE -->
+                <ul style="font-size:15px;line-height:1.7em;margin-bottom:18px;">
+                    <li>
+                        <b>SGP-GenBench reflects general model abilities.</b>
+                        The ranking of models on our benchmark aligns well with their perceived general capabilities, especially in code generation. For example, Claude 3.7 Sonnet Thinking generally outperforms o3, which in turn surpasses Gemini 2.5 Pro Preview, followed by open-source systems like DeepSeek-R1 and Qwen-2.5-7B. This consistent ordering suggests that SVG generation is a reliable indicator of broader model competence.
+                    </li>
+                    <li>
+                        <b>Closed-source models remain strongest.</b>
+                        Frontier systems achieve the best results not only on compositional reasoning tasks such as attribute binding and numeracy, where Claude 3.7 Sonnet Thinking reaches 90.5 on color binding and 89.4 on numeracy, but also on scene and object fidelity, where Gemini 2.5 Pro Preview attains the top DINO object score of 0.653 and strong VQA scene performance of 0.554.
+                    </li>
+                    <li>
+                        <b>Our RL-trained model substantially narrows the gap.</b>
+                        The RL post-trained Qwen-2.5-7B raises its overall compositional score from 8.8 to 60.8, outperforming all other open-source counterparts such as DeepSeek-R1 and QwQ-32B. It also achieves the best VQA score across all models at 0.596, slightly higher than Claude 3.7 Sonnet Thinking, demonstrating that reinforcement learning enables open-source models to approach the closed-source frontier.
+                    </li>
+                </ul>
+                <h3 id="object-scene">Object & Scene</h3>
+                <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
+                <style>
+                    #sortable-results-table {
+                        font-size: 14px;
+                        background: #fff;
+                        border: 1px solid #ddd;
+                        margin: 20px 0;
+                        width: 100%;
+                    }
+                    #sortable-results-table th, #sortable-results-table td {
+                        border: 1px solid #ddd;
+                        padding: 6px 8px;
+                        text-align: center;
+                    }
+                    #sortable-results-table th {
+                        background: #f8f9fa;
+                        font-weight: 600;
+                        cursor: pointer;
+                    }
+                    #sortable-results-table .group-header {
+                        background: #f0f0f0;
+                        font-weight: 600;
+                        text-align: left;
+                    }
+                    #sortable-results-table .ours-row {
+                        background: rgba(255, 165, 0, 0.15);
+                        font-weight: 600;
+                    }
+                </style>
+                <table id="sortable-results-table" style="width:100%">
+                    <thead>
+                        <tr>
+                            <th rowspan="2" data-orderable="false">Model</th>
+                            <th colspan="3">CLIP&nbsp;&uarr;</th>
+                            <th colspan="3">DINO&nbsp;&uarr;</th>
+                            <th colspan="3">VQA&nbsp;&uarr;</th>
+                            <th colspan="3">HPS&nbsp;&uarr;</th>
+                        </tr>
+                        <tr>
+                            <th>Sce.</th>
+                            <th>Obj.</th>
+                            <th>Avg.</th>
+                            <th>Sce.</th>
+                            <th>Obj.</th>
+                            <th>Avg.</th>
+                            <th>Sce.</th>
+                            <th>Obj.</th>
+                            <th>Avg.</th>
+                            <th>Sce.</th>
+                            <th>Obj.</th>
+                            <th>Avg.</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr class="group-header"><td colspan="13">Frontier closed-source LLMs</td></tr>
+                        <tr>
+                            <td>GPT-4o-mini</td>
+                            <td>0.207</td><td>0.278</td><td>0.243</td>
+                            <td>0.021</td><td>0.573</td><td>0.297</td>
+                            <td>0.295</td><td>0.465</td><td>0.380</td>
+                            <td>0.118</td><td>0.174</td><td>0.146</td>
+                        </tr>
+                        <tr>
+                            <td>GPT-4o</td>
+                            <td>0.219</td><td>0.284</td><td>0.252</td>
+                            <td>0.031</td><td>0.602</td><td>0.316</td>
+                            <td>0.338</td><td>0.497</td><td>0.417</td>
+                            <td>0.125</td><td>0.182</td><td>0.153</td>
+                        </tr>
+                        <tr>
+                            <td>o1-mini</td>
+                            <td>0.221</td><td>0.289</td><td>0.255</td>
+                            <td>0.028</td><td>0.603</td><td>0.315</td>
+                            <td>0.330</td><td>0.508</td><td>0.419</td>
+                            <td>0.121</td><td>0.185</td><td>0.153</td>
+                        </tr>
+                        <tr>
+                            <td>o1</td>
+                            <td>0.220</td><td>0.285</td><td>0.252</td>
+                            <td>0.031</td><td>0.607</td><td>0.319</td>
+                            <td>0.354</td><td>0.520</td><td>0.437</td>
+                            <td>0.122</td><td>0.185</td><td>0.153</td>
+                        </tr>
+                        <tr>
+                            <td>o3-mini</td>
+                            <td>0.231</td><td>0.293</td><td>0.262</td>
+                            <td>0.036</td><td>0.608</td><td>0.322</td>
+                            <td>0.379</td><td>0.520</td><td>0.450</td>
+                            <td>0.128</td><td>0.187</td><td>0.158</td>
+                        </tr>
+                        <tr>
+                            <td>o3</td>
+                            <td>0.253</td><td>0.283</td><td>0.268</td>
+                            <td>0.067</td><td>0.595</td><td>0.331</td>
+                            <td>0.521</td><td>0.482</td><td>0.502</td>
+                            <td>0.153</td><td>0.180</td><td>0.166</td>
+                        </tr>
+                        <tr>
+                            <td>o4-mini</td>
+                            <td>0.246</td><td>0.296</td><td>0.271</td>
+                            <td>0.052</td><td>0.629</td><td>0.340</td>
+                            <td>0.469</td><td>0.536</td><td>0.503</td>
+                            <td>0.143</td><td>0.193</td><td>0.168</td>
+                        </tr>
+                        <tr>
+                            <td>Gemini 2.0 Flash</td>
+                            <td>0.204</td><td>0.275</td><td>0.240</td>
+                            <td>0.023</td><td>0.588</td><td>0.306</td>
+                            <td>0.293</td><td>0.468</td><td>0.381</td>
+                            <td>0.116</td><td>0.176</td><td>0.146</td>
+                        </tr>
+                        <tr>
+                            <td>Gemini 2.5 Flash Preview</td>
+                            <td>0.222</td><td>0.286</td><td>0.254</td>
+                            <td>0.033</td><td>0.603</td><td>0.318</td>
+                            <td>0.349</td><td>0.498</td><td>0.424</td>
+                            <td>0.125</td><td>0.183</td><td>0.154</td>
+                        </tr>
+                        <tr>
+                            <td>Gemini 2.5 Pro Preview</td>
+                            <td>0.256</td><td>0.302</td><td>0.279</td>
+                            <td>0.088</td><td><b>0.653</b></td><td><b>0.371</b></td>
+                            <td>0.554</td><td>0.572</td><td>0.563</td>
+                            <td>0.154</td><td>0.199</td><td>0.177</td>
+                        </tr>
+                        <tr>
+                            <td>Claude 3.5 Sonnet</td>
+                            <td>0.240</td><td>0.293</td><td>0.266</td>
+                            <td>0.055</td><td>0.624</td><td>0.340</td>
+                            <td>0.428</td><td>0.528</td><td>0.478</td>
+                            <td>0.140</td><td>0.190</td><td>0.165</td>
+                        </tr>
+                        <tr>
+                            <td>Claude 3.7 Sonnet</td>
+                            <td><b>0.262</b></td><td><b>0.306</b></td><td><b>0.284</b></td>
+                            <td>0.088</td><td>0.647</td><td>0.368</td>
+                            <td>0.581</td><td>0.567</td><td>0.574</td>
+                            <td><b>0.165</b></td><td><b>0.200</b></td><td><b>0.183</b></td>
+                        </tr>
+                        <tr>
+                            <td>Claude 3.7 Thinking</td>
+                            <td><b>0.262</b></td><td>0.305</td><td><b>0.284</b></td>
+                            <td><b>0.090</b></td><td>0.642</td><td>0.366</td>
+                            <td><b>0.594</b></td><td><b>0.574</b></td><td><b>0.584</b></td>
+                            <td>0.164</td><td>0.199</td><td>0.181</td>
+                        </tr>
+                        <tr class="group-header"><td colspan="13">Open-source LLMs</td></tr>
+                        <tr>
+                            <td>QwQ-32B</td>
+                            <td>0.219</td><td>0.272</td><td>0.245</td>
+                            <td>0.031</td><td>0.549</td><td>0.290</td>
+                            <td>0.334</td><td>0.456</td><td>0.395</td>
+                            <td>0.123</td><td>0.172</td><td>0.147</td>
+                        </tr>
+                        <tr>
+                            <td>DeepSeek-R1</td>
+                            <td>0.228</td><td>0.278</td><td>0.253</td>
+                            <td>0.042</td><td><b>0.594</b></td><td>0.318</td>
+                            <td>0.416</td><td>0.508</td><td>0.462</td>
+                            <td>0.134</td><td><b>0.180</b></td><td>0.157</td>
+                        </tr>
+                        <tr>
+                            <td>Qwen-2.5-7B</td>
+                            <td>0.155</td><td>0.213</td><td>0.184</td>
+                            <td>0.008</td><td>0.400</td><td>0.204</td>
+                            <td>0.265</td><td>0.385</td><td>0.325</td>
+                            <td>0.103</td><td>0.148</td><td>0.125</td>
+                        </tr>
+                        <tr class="ours-row">
+                            <td>Qwen-2.5-7B w/ RL (ours)</td>
+                            <td><b>0.258</b></td><td><b>0.286</b></td><td><b>0.272</b></td>
+                            <td><b>0.102</b></td><td>0.566</td><td><b>0.334</b></td>
+                            <td><b>0.632</b></td><td><b>0.560</b></td><td><b>0.596</b></td>
+                            <td><b>0.150</b></td><td>0.177</td><td><b>0.164</b></td>
+                        </tr>
+                    </tbody>
+                </table>
+                <p style="font-size:13px;color:#666;margin-top:6px;">
+                    <span>Click any column header to sort ascending/descending. Bold indicates the best in each group.</span>
+                </p>
+                <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
+                <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+                <script>
+                    // 使分组行不可排序，且点击表头可排序
+                    $(document).ready(function() {
+                        // 先移除分组行，单独保存
+                        var groupRows = [];
+                        $('#sortable-results-table .group-header').each(function(){
+                            groupRows.push({
+                                index: $(this).index(),
+                                html: $(this)[0].outerHTML
+                            });
+                            $(this).remove();
+                        });
+
+                        // 初始化DataTable
+                        var table = $('#sortable-results-table').DataTable({
+                            paging: false,
+                            searching: false,
+                            info: false,
+                            ordering: true,
+                            order: [],
+                            autoWidth: false,
+                            // Model列不可排序
+                            columnDefs: [
+                                { orderable: false, targets: 0 }
+                            ],
+                            language: {
+                                emptyTable: "无数据"
+                            }
+                        });
+
+                        // 重新插入分组行
+                        groupRows.forEach(function(gr, idx){
+                            // 计算插入位置
+                            var rowIdx = gr.index - idx;
+                            var node = $(gr.html)[0];
+                            table.row(rowIdx).node().parentNode.insertBefore(node, table.row(rowIdx).node());
+                        });
+                    });
+                </script>
                 
-                <h2 id="conclusion">Conclusion</h2>
+                <h3 id="composition">Composition</h3>
+                <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
+                <style>
+                    #composition-results-table {
+                        font-size: 14px;
+                        background: #fff;
+                        border: 1px solid #ddd;
+                        margin: 20px 0;
+                        width: 100%;
+                    }
+                    #composition-results-table th, #composition-results-table td {
+                        border: 1px solid #ddd;
+                        padding: 6px 8px;
+                        text-align: center;
+                    }
+                    #composition-results-table th {
+                        background: #f8f9fa;
+                        font-weight: 600;
+                        cursor: pointer;
+                    }
+                    #composition-results-table .group-header {
+                        background: #f0f0f0;
+                        font-weight: 600;
+                        text-align: left;
+                    }
+                    #composition-results-table .ours-row {
+                        background: rgba(255, 165, 0, 0.15);
+                        font-weight: 600;
+                    }
+                </style>
+                <table id="composition-results-table" style="width:100%">
+                    <thead>
+                        <tr>
+                            <th rowspan="2" data-orderable="false">Model</th>
+                            <th colspan="4">Attribute Binding&nbsp;&uarr;</th>
+                            <th colspan="4">Spatial Relation&nbsp;&uarr;</th>
+                            <th colspan="4">Numeracy&nbsp;&uarr;</th>
+                            <th rowspan="2">Avg.&nbsp;&uarr;</th>
+                        </tr>
+                        <tr>
+                            <th style="font-size:12px;">Color</th>
+                            <th style="font-size:12px;">Shape</th>
+                            <th style="font-size:12px;">Texture</th>
+                            <th style="font-size:12px;">Avg.</th>
+                            <th style="font-size:12px;">2D</th>
+                            <th style="font-size:12px;">3D</th>
+                            <th style="font-size:12px;">Implicit</th>
+                            <th style="font-size:12px;">Avg.</th>
+                            <th style="font-size:12px;">Total</th>
+                            <th style="font-size:12px;">Item</th>
+                            <th style="font-size:12px;">CPI</th>
+                            <th style="font-size:12px;">Overall</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr class="group-header"><td colspan="14">Frontier closed-source LLMs</td></tr>
+                        <tr>
+                            <td>GPT-4o</td>
+                            <td>62.2</td><td>48.7</td><td>34.3</td><td>48.4</td>
+                            <td>49.7</td><td>37.3</td><td>49.2</td><td>45.4</td>
+                            <td>85.9</td><td>25.5</td><td>51.1</td><td>52.7</td>
+                            <td>48.3</td>
+                        </tr>
+                        <tr>
+                            <td>o1</td>
+                            <td>70.8</td><td>25.2</td><td>53.0</td><td>49.6</td>
+                            <td>54.6</td><td>39.4</td><td>46.4</td><td>46.8</td>
+                            <td>66.4</td><td>20.1</td><td>41.7</td><td>42.0</td>
+                            <td>46.7</td>
+                        </tr>
+                        <tr>
+                            <td>o3</td>
+                            <td>88.9</td><td>73.6</td><td>71.7</td><td>78.1</td>
+                            <td><b>81.6</b></td><td>62.0</td><td>84.5</td><td>76.0</td>
+                            <td>91.6</td><td>59.8</td><td>81.1</td><td>78.8</td>
+                            <td>77.5</td>
+                        </tr>
+                        <tr>
+                            <td>o4-mini</td>
+                            <td>82.4</td><td>62.1</td><td>69.6</td><td>71.4</td>
+                            <td>71.0</td><td>57.9</td><td>76.5</td><td>68.5</td>
+                            <td>90.3</td><td>52.9</td><td>76.1</td><td>74.3</td>
+                            <td>71.0</td>
+                        </tr>
+                        <tr>
+                            <td>Gemini 2.5 Flash Preview</td>
+                            <td>63.6</td><td>45.0</td><td>56.9</td><td>55.2</td>
+                            <td>46.0</td><td>38.9</td><td>57.1</td><td>47.3</td>
+                            <td>82.8</td><td>34.5</td><td>62.0</td><td>59.8</td>
+                            <td>53.4</td>
+                        </tr>
+                        <tr>
+                            <td>Gemini 2.5 Pro Preview</td>
+                            <td>88.1</td><td>65.7</td><td>74.9</td><td>76.2</td>
+                            <td>77.4</td><td>59.1</td><td>80.0</td><td>72.2</td>
+                            <td>94.7</td><td>68.0</td><td>83.8</td><td>82.3</td>
+                            <td>76.2</td>
+                        </tr>
+                        <tr>
+                            <td>Claude 3.7 Sonnet</td>
+                            <td>89.3</td><td>82.8</td><td>77.3</td><td>83.1</td>
+                            <td>75.9</td><td>59.4</td><td>73.7</td><td>69.7</td>
+                            <td>91.4</td><td>65.5</td><td>85.5</td><td>82.5</td>
+                            <td>77.9</td>
+                        </tr>
+                        <tr>
+                            <td><b>Claude 3.7 Sonnet Thinking</b></td>
+                            <td><b>90.5</b></td><td><b>85.6</b></td><td><b>82.4</b></td><td><b>86.2</b></td>
+                            <td>80.2</td><td><b>74.4</b></td><td><b>86.4</b></td><td><b>80.3</b></td>
+                            <td><b>94.9</b></td><td><b>78.9</b></td><td><b>91.4</b></td><td><b>89.4</b></td>
+                            <td><b>84.8</b></td>
+                        </tr>
+                        <tr class="group-header"><td colspan="14">Open-source LLMs</td></tr>
+                        <tr>
+                            <td>QwQ-32B</td>
+                            <td>54.3</td><td>51.0</td><td>31.4</td><td>45.6</td>
+                            <td>43.6</td><td>33.5</td><td>46.0</td><td>41.0</td>
+                            <td>79.9</td><td>21.1</td><td>51.4</td><td>50.9</td>
+                            <td>45.2</td>
+                        </tr>
+                        <tr>
+                            <td>DeepSeek-R1</td>
+                            <td>72.6</td><td>62.7</td><td><b>48.4</b></td><td>61.2</td>
+                            <td><b>59.3</b></td><td>43.8</td><td>58.2</td><td>53.7</td>
+                            <td><b>83.5</b></td><td>35.4</td><td><b>60.4</b></td><td><b>57.4</b></td>
+                            <td>57.4</td>
+                        </tr>
+                        <tr>
+                            <td>Qwen-2.5-7B</td>
+                            <td>7.1</td><td>10.0</td><td>1.7</td><td>6.3</td>
+                            <td>5.2</td><td>5.8</td><td>8.1</td><td>6.4</td>
+                            <td>42.6</td><td>5.8</td><td>10.7</td><td>16.1</td>
+                            <td>8.8</td>
+                        </tr>
+                        <tr class="ours-row">
+                            <td>Qwen-2.5-7B - RL <b>(Ours)</b></td>
+                            <td><b>84.3</b></td><td><b>71.3</b></td><td>46.0</td><td><b>67.2</b></td>
+                            <td>55.7</td><td><b>53.9</b></td><td><b>61.7</b></td><td><b>57.1</b></td>
+                            <td>63.4</td><td><b>47.5</b></td><td>57.6</td><td>56.8</td>
+                            <td><b>60.8</b></td>
+                        </tr>
+                    </tbody>
+                </table>
+                <p style="font-size:13px;color:#666;margin-top:6px;">
+                    <span>Click any column header to sort ascending/descending. Bold indicates the best in each group.</span>
+                </p>
+                <script>
+                    // 使分组行不可排序，且点击表头可排序
+                    $(document).ready(function() {
+                        // 先移除分组行，单独保存
+                        var groupRows = [];
+                        $('#composition-results-table .group-header').each(function(){
+                            groupRows.push({
+                                index: $(this).index(),
+                                html: $(this)[0].outerHTML
+                            });
+                            $(this).remove();
+                        });
+
+                        // 初始化DataTable
+                        var table = $('#composition-results-table').DataTable({
+                            paging: false,
+                            searching: false,
+                            info: false,
+                            ordering: true,
+                            order: [],
+                            autoWidth: false,
+                            // Model列不可排序
+                            columnDefs: [
+                                { orderable: false, targets: 0 }
+                            ],
+                            language: {
+                                emptyTable: "无数据"
+                            }
+                        });
+
+                        // 重新插入分组行
+                        groupRows.forEach(function(gr, idx){
+                            // 计算插入位置
+                            var rowIdx = gr.index - idx;
+                            var node = $(gr.html)[0];
+                            table.row(rowIdx).node().parentNode.insertBefore(node, table.row(rowIdx).node());
+                        });
+                    });
+                </script>
+
+                
+                <h2 id="conclusion">Analysis</h2>
+                <h3> Reinforcement Learning vs. Best-of-N Sampling </h3>
+                Best-of-N (BoN) only approaches RL training results when N is extremely large, showing that RL is highly effective and not easily matched by simply sampling more.
+                
+                <h3>How SGP Generation Capabilities Evolve during Training</h3>
                 <p>
-                    We are continuing to enhance our visual models with improved reasoning capabilities and
-                    broader domain knowledge. Future versions will demonstrate even more sophisticated
-                    understanding of complex visual inputs and better integration with programming tools.
+                    <b>Strategy 1: Decomposition into basic components.</b>
+                    The model first breaks down complex objects into simple SVG elements (like <code>rect</code>, <code>circle</code>, <code>line</code>, <code>path</code>), often with a brief comment. As training advances, it uses more granular decomposition, resulting in more accurate and well-placed drawings. The improvement comes from better composition of these fixed primitives, not from using more types.
+                </p>
+                <p>
+                    <b>Strategy 2: Contextual optional details.</b>
+                    The model learns to add relevant, unprompted details—such as sprinkles on a cake or waves at a beach—that enhance scene realism and completeness. These additions make the output more coherent and visually appealing.
                 </p>
 
                 <h2 id="bibtex">Bibtex</h2>
                 <div class="bibtex-block">
-                    <!-- <div class="bibtex-title">BibTeX Citation</div> -->
-                    <pre class="bibtex-pre">@article{chen2025python,
-  title={Python is a good visual primitive},
+                    <pre class="bibtex-pre" id="bibtex-content">@article{chen2025sgp,
+  title={Symbolic Graphics Programming with Large Language Models},
   author={Chen, Yamei and Zhang, Haoquan and Huang, Yangyi and Qiu, Zeju and Zhang, Kaipeng and Wen, Yandong and Liu, Weiyang},
-  year={2025},
+  journal={arXiv preprint arXiv:2509.01000},
+  year={2025}
 }</pre>
-                    <!-- <button class="bibtex-copy-btn" onclick="copyBibtex()">Copy</button> -->
+                    <button class="bibtex-copy-btn" onclick="navigator.clipboard.writeText(document.getElementById('bibtex-content').innerText)">Copy</button>
                 </div>
             </div>
         </article>
