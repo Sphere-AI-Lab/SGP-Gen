@@ -824,15 +824,15 @@
                 <h3>Discussion of Method</h3>
                 <p></p>
                 <p>
-                    <b>- Distilling from vision models.</b>
+                    <b>Distilling from vision models.</b>
                     We use external vision models (e.g., DINO, CLIP) to define rewards, guiding the LLM to align its generations with strong visual and semantic priors. This implicit distillation improves both visual understanding and cross-modal alignment.
                 </p>
                 <p>
-                    <b>- Training without ground truth SGPs.</b>
+                    <b>Training without ground truth SGPs.</b>
                     Our RL method learns directly from images using feedback from vision models, removing the need for paired image-program data and enabling scalable, diverse training.
                 </p>
                 <p>
-                    <b>- Aligning language and vision.</b>
+                    <b>Aligning language and vision.</b>
                     The RL process ensures that generated SGPs are consistent with both linguistic input and visual model judgments, grounding language in visual evidence and enhancing cross-modal reasoning.
                 </p>
                 
@@ -840,7 +840,7 @@
                 <h3>Overview of SGP-GenBench</h3>
                 <p></p>
                 <!-- INSERT_YOUR_CODE -->
-                <ul style="font-size:15px;line-height:1.7em;margin-bottom:18px;">
+                <ul style="line-height:1.7em;margin-bottom:18px;">
                     <li>
                         <b>SGP-GenBench reflects general model abilities.</b>
                         The ranking of models on our benchmark aligns well with their perceived general capabilities, especially in code generation. For example, Claude 3.7 Sonnet Thinking generally outperforms o3, which in turn surpasses Gemini 2.5 Pro Preview, followed by open-source systems like DeepSeek-R1 and Qwen-2.5-7B. This consistent ordering suggests that SVG generation is a reliable indicator of broader model competence.
